@@ -34,7 +34,7 @@ function Supervision() {
         const i = Math.floor(Math.random() * r.length);
         return r.map((x, j) => {
           if (j !== i || x.estado === "Completada") return { ...x, act: x.act + 3 };
-          return { ...x, estado: flujo[flujo.indexOf(x.estado) + 1], act: 0 };
+          return { ...x, estado: flujo[flujo.indexOf(x.estado) + 1] ?? x.estado, act: 0 };
         });
       });
     }, 3000);
