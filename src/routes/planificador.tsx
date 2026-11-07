@@ -18,7 +18,7 @@ export const Route = createFileRoute("/planificador")({
 
 type Cols = Record<string, Paciente[]>;
 const dist = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => Math.hypot((a.lat - b.lat) * 111, (a.lng - b.lng) * 89);
-const km = (r: Paciente[]) => r.reduce((acc, p, i) => acc + dist(i === 0 ? CESFAM : r[i - 1], p), 0) + (r.length ? dist(r[r.length - 1]!, CESFAM) : 0);
+const km = (r: Paciente[]) => r.reduce((acc, p, i) => acc + dist(i === 0 ? CESFAM : r[i - 1]!, p), 0) + (r.length ? dist(r[r.length - 1]!, CESFAM) : 0);
 
 // Simulación de un solver VRP (OR-Tools): agrupa por ángulo y ordena por vecino más cercano.
 function optimizar(): Cols {
