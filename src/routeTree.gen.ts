@@ -10,33 +10,102 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuditoriaRouteImport } from './routes/auditoria'
+import { Route as IntegracionRouteImport } from './routes/integracion'
+import { Route as MapaRouteImport } from './routes/mapa'
+import { Route as PlanificadorRouteImport } from './routes/planificador'
+import { Route as SupervisionRouteImport } from './routes/supervision'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuditoriaRoute = AuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegracionRoute = IntegracionRouteImport.update({
+  id: '/integracion',
+  path: '/integracion',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapaRoute = MapaRouteImport.update({
+  id: '/mapa',
+  path: '/mapa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanificadorRoute = PlanificadorRouteImport.update({
+  id: '/planificador',
+  path: '/planificador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupervisionRoute = SupervisionRouteImport.update({
+  id: '/supervision',
+  path: '/supervision',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auditoria': typeof AuditoriaRoute
+  '/integracion': typeof IntegracionRoute
+  '/mapa': typeof MapaRoute
+  '/planificador': typeof PlanificadorRoute
+  '/supervision': typeof SupervisionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auditoria': typeof AuditoriaRoute
+  '/integracion': typeof IntegracionRoute
+  '/mapa': typeof MapaRoute
+  '/planificador': typeof PlanificadorRoute
+  '/supervision': typeof SupervisionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auditoria': typeof AuditoriaRoute
+  '/integracion': typeof IntegracionRoute
+  '/mapa': typeof MapaRoute
+  '/planificador': typeof PlanificadorRoute
+  '/supervision': typeof SupervisionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auditoria'
+    | '/integracion'
+    | '/mapa'
+    | '/planificador'
+    | '/supervision'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auditoria'
+    | '/integracion'
+    | '/mapa'
+    | '/planificador'
+    | '/supervision'
+  id:
+    | '__root__'
+    | '/'
+    | '/auditoria'
+    | '/integracion'
+    | '/mapa'
+    | '/planificador'
+    | '/supervision'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuditoriaRoute: typeof AuditoriaRoute
+  IntegracionRoute: typeof IntegracionRoute
+  MapaRoute: typeof MapaRoute
+  PlanificadorRoute: typeof PlanificadorRoute
+  SupervisionRoute: typeof SupervisionRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auditoria': {
+      id: '/auditoria'
+      path: '/auditoria'
+      fullPath: '/auditoria'
+      preLoaderRoute: typeof AuditoriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integracion': {
+      id: '/integracion'
+      path: '/integracion'
+      fullPath: '/integracion'
+      preLoaderRoute: typeof IntegracionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mapa': {
+      id: '/mapa'
+      path: '/mapa'
+      fullPath: '/mapa'
+      preLoaderRoute: typeof MapaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planificador': {
+      id: '/planificador'
+      path: '/planificador'
+      fullPath: '/planificador'
+      preLoaderRoute: typeof PlanificadorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supervision': {
+      id: '/supervision'
+      path: '/supervision'
+      fullPath: '/supervision'
+      preLoaderRoute: typeof SupervisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuditoriaRoute: AuditoriaRoute,
+  IntegracionRoute: IntegracionRoute,
+  MapaRoute: MapaRoute,
+  PlanificadorRoute: PlanificadorRoute,
+  SupervisionRoute: SupervisionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
