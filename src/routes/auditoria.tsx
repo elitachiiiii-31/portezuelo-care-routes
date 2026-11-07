@@ -21,7 +21,7 @@ const registros = pacientes.flatMap((p, i) => {
   const distancia = gps ? 8 + ((i * 7) % 30) : 40 + ((i * 53) % 400);
   return [{
     id: `AUD-${1040 + i}`, fecha: `07-11-2026 ${9 + Math.floor(i / 2)}:${(i * 13) % 60 < 10 ? "0" : ""}${(i * 13) % 60}`,
-    paciente: p.nombre, funcionario: equipos[i % 3].nombre.split("·")[1].trim(),
+    paciente: p.nombre, funcionario: equipos[i % 3]!.nombre.split("·")[1]!.trim(),
     tipo: gps ? "GPS automático" : "Manual", distancia, geocerca: distancia <= 50,
     motivo: gps ? "Ingreso a geocerca 50 m + 20 min permanencia" : ["Sin señal móvil en sector", "GPS deshabilitado", "Paciente trasladado"][i % 3],
     coord: `${(p.lat + 0.0001 * i).toFixed(5)}, ${p.lng.toFixed(5)}`,

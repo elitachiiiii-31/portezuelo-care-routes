@@ -18,7 +18,7 @@ export const Route = createFileRoute("/planificador")({
 
 type Cols = Record<string, Paciente[]>;
 const dist = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => Math.hypot((a.lat - b.lat) * 111, (a.lng - b.lng) * 89);
-const km = (r: Paciente[]) => r.reduce((acc, p, i) => acc + dist(i === 0 ? CESFAM : r[i - 1], p), 0) + (r.length ? dist(r[r.length - 1], CESFAM) : 0);
+const km = (r: Paciente[]) => r.reduce((acc, p, i) => acc + dist(i === 0 ? CESFAM : r[i - 1], p), 0) + (r.length ? dist(r[r.length - 1]!, CESFAM) : 0);
 
 // Simulación de un solver VRP (OR-Tools): agrupa por ángulo y ordena por vecino más cercano.
 function optimizar(): Cols {
@@ -47,9 +47,9 @@ function Planificador() {
   const drop = (to: string, index?: number) => {
     if (!drag) return;
     setCols((c) => {
-      const item = c[drag.from].find((p) => p.id === drag.id)!;
-      const next = { ...c, [drag.from]: c[drag.from].filter((p) => p.id !== drag.id) };
-      const dest = [...next[to]];
+      const item = (c[drag.from] ?? []).find((p) => p.id === drag.id)!;
+      const next = { ...c, [drag.from]: (c[drag.from] ?? []).filter((p) => p.id !== drag.id) };
+      const dest = [...(next[to] ?? [])];
       dest.splice(index ?? dest.length, 0, item);
       return { ...next, [to]: dest };
     });
@@ -63,10 +63,10 @@ function Planificador() {
       <div className="mb-3">
         <h2 className="text-base">{title}</h2>
         {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
-        {id !== "pool" && <p className="mt-1 text-xs">{cols[id].length} visitas · {km(cols[id]).toFixed(1)} km est.</p>}
+        {id !== "pool" && <p className="mt-1 text-xs">{(cols[id] ?? []).length} visitas · {km((cols[id] ?? [])).toFixed(1)} km est.</p>}
       </div>
       <div className="flex-1 space-y-2">
-        {cols[id].map((p, i) => (
+        {(cols[id] ?? []).map((p, i) => (
           <div key={p.id} draggable onDragStart={() => setDrag({ id: p.id, from: id })}
             onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.stopPropagation(); drop(id, i); }}
             className="flex cursor-grab items-center gap-2 rounded-lg border bg-background p-2.5 text-sm active:cursor-grabbing">
@@ -76,12 +76,12 @@ function Planificador() {
             <span className={`rounded-full px-2 text-[10px] ${prioridadClass[p.prioridad]}`}>{p.prioridad}</span>
           </div>
         ))}
-        {cols[id].length === 0 && <p className="rounded-lg border border-dashed p-6 text-center text-xs text-muted-foreground">Arrastre visitas aquí</p>}
+        {(cols[id] ?? []).length === 0 && <p className="rounded-lg border border-dashed p-6 text-center text-xs text-muted-foreground">Arrastre visitas aquí</p>}
       </div>
     </div>
   );
 
-  const total = equipos.reduce((a, e) => a + km(cols[e.id]), 0);
+  const total = equipos.reduce((a, e) => a + km(cols[e.id] ?? []), 0);
   return (
     <>
       <PageHeader title="Planificador diario" subtitle={`Optimización logística (VRP · Google OR-Tools simulado) · Total estimado ${total.toFixed(1)} km`}

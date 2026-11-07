@@ -24,7 +24,7 @@ const estilo: Record<Estado, string> = {
   Cancelada: "bg-destructive/15 text-destructive",
 };
 
-const inicial = pacientes.map((p, i) => ({ ...p, equipo: equipos[i % 3].nombre.split("·")[1].trim(), estado: flujo[i % 4] as Estado, hora: `${8 + Math.floor(i / 2)}:${i % 2 ? "30" : "00"}`, act: 0 }));
+const inicial = pacientes.map((p, i) => ({ ...p, equipo: equipos[i % 3]!.nombre.split("·")[1]!.trim(), estado: flujo[i % 4] as Estado, hora: `${8 + Math.floor(i / 2)}:${i % 2 ? "30" : "00"}`, act: 0 }));
 
 function Supervision() {
   const [rows, setRows] = useState(inicial);
