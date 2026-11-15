@@ -13,8 +13,14 @@ RUN npm install
 # Copiar el resto del código
 COPY . .
 
+# Compilar la aplicación para producción
+RUN npm run build
+
+# Instalar un servidor estático ligero para producción
+RUN npm install -g serve
+
 # Exponer el puerto
 EXPOSE 8080 
 
-# Comando para iniciar
-CMD ["npm", "run", "dev"]
+# Comando para servir la carpeta de producción (dist)
+CMD ["serve", "-s", "dist", "-l", "8080"]
