@@ -13,10 +13,7 @@ export default defineConfig({
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },
   },
-  // Agrega esto para permitir el dominio de Render:
   server: {
-    allowedHosts: [
-      'portezuelo-care-routesque-ahago-ahora.onrender.com'
-    ]
+    allowedHosts: true
   }
 });
