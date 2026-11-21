@@ -1,13 +1,14 @@
-// URL base de tu backend corriendo en Docker
-const API_BASE_URL = "http://localhost:8000/api";
+const rawApiUrl = import.meta.env.VITE_API_URL?.trim() || "http://localhost:8000/api";
+const API_BASE_URL = rawApiUrl.replace(/\/+$/, "");
 
-// 1. Obtener métricas para el Dashboard
 export async function fetchDashboardMetrics() {
   const response = await fetch(`${API_BASE_URL}/dashboard-metrics/`);
+  if (!response.ok) {
+    throw new Error(`Error al obtener métricas (${response.status})`);
+  }
   return await response.json();
 }
 
-// 2. Simular importación desde Rayen (Petición POST)
 export async function importarDesdeRayen() {
   const response = await fetch(`${API_BASE_URL}/importar-rayen/`, {
     method: "POST",
@@ -15,11 +16,16 @@ export async function importarDesdeRayen() {
       "Content-Type": "application/json",
     },
   });
+  if (!response.ok) {
+    throw new Error(`Error al importar desde Rayen (${response.status})`);
+  }
   return await response.json();
 }
 
-// 3. Obtener la ruta optimizada con Google OR-Tools
 export async function obtenerRutaOptimizada() {
   const response = await fetch(`${API_BASE_URL}/optimizar-ruta/`);
+  if (!response.ok) {
+    throw new Error(`Error al optimizar ruta (${response.status})`);
+  }
   return await response.json();
 }
