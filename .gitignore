@@ -30,7 +30,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+<<<<<<< HEAD
 
 .env
 .env.local
 .env.*.local
+=======
+>>>>>>> 522227975ab3628f2d0f2273cfa72a9d47d875eb
+
+.venv/
+backend/backend/.venv/
+__pycache__/
+*.pyc
