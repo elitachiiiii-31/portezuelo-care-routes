@@ -29,3 +29,59 @@ export async function obtenerRutaOptimizada() {
   }
   return await response.json();
 }
+export interface PayloadEstadoVisita {
+  visitaId: string | number;
+  estado: "Pendiente" | "En ruta" | "En visita" | "Completada" | "Rechazada";
+  observacion?: string;
+  timestamp: string;
+}
+
+export interface NuevoPacienteTerreno {
+  run: string;
+  nombreCompleto: string;
+  fichaClinica: string;
+  sector: string;
+  referenciaAcceso: string;
+  telefonoCuidador: string;
+  reqClinico: string;
+  latitud?: number | null;
+  longitud?: number | null;
+  registradoPor: string;
+  timestamp: string;
+}
+
+export async function actualizarEstadoVisitaAPI(payload: PayloadEstadoVisita) {
+  const response = await fetch(`${API_BASE_URL}/visitas/${payload.visitaId}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      estado: payload.estado,
+      observacion: payload.observacion ?? "",
+      ultima_senal: payload.timestamp,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al actualizar visita (${response.status})`);
+  }
+
+  return await response.json();
+}
+
+export async function crearPacienteTerrenoAPI(paciente: NuevoPacienteTerreno) {
+  const response = await fetch(`${API_BASE_URL}/pacientes/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(paciente),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al guardar paciente (${response.status})`);
+  }
+
+  return await response.json();
+}

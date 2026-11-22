@@ -1,6 +1,15 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { LayoutDashboard, DatabaseZap, Map, Route as RouteIcon, Activity, ShieldCheck, PanelLeft } from "lucide-react";
+import {
+  LayoutDashboard,
+  DatabaseZap,
+  Map,
+  Route as RouteIcon,
+  Activity,
+  ShieldCheck,
+  Stethoscope,
+  PanelLeft,
+} from "lucide-react";
 
 const items = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -8,6 +17,7 @@ const items = [
   { to: "/mapa", label: "Georreferenciación", icon: Map },
   { to: "/planificador", label: "Planificador", icon: RouteIcon },
   { to: "/supervision", label: "Supervisión", icon: Activity },
+  { to: "/terreno", label: "Vista Terreno", icon: Stethoscope },
   { to: "/auditoria", label: "Auditoría", icon: ShieldCheck },
 ] as const;
 

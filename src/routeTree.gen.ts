@@ -15,6 +15,7 @@ import { Route as IntegracionRouteImport } from './routes/integracion'
 import { Route as MapaRouteImport } from './routes/mapa'
 import { Route as PlanificadorRouteImport } from './routes/planificador'
 import { Route as SupervisionRouteImport } from './routes/supervision'
+import { Route as TerrenoRouteImport } from './routes/terreno'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const SupervisionRoute = SupervisionRouteImport.update({
   path: '/supervision',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TerrenoRoute = TerrenoRouteImport.update({
+  id: '/terreno',
+  path: '/terreno',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/mapa': typeof MapaRoute
   '/planificador': typeof PlanificadorRoute
   '/supervision': typeof SupervisionRoute
+  '/terreno': typeof TerrenoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/mapa': typeof MapaRoute
   '/planificador': typeof PlanificadorRoute
   '/supervision': typeof SupervisionRoute
+  '/terreno': typeof TerrenoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/mapa': typeof MapaRoute
   '/planificador': typeof PlanificadorRoute
   '/supervision': typeof SupervisionRoute
+  '/terreno': typeof TerrenoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/mapa'
     | '/planificador'
     | '/supervision'
+    | '/terreno'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/mapa'
     | '/planificador'
     | '/supervision'
+    | '/terreno'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/mapa'
     | '/planificador'
     | '/supervision'
+    | '/terreno'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   MapaRoute: typeof MapaRoute
   PlanificadorRoute: typeof PlanificadorRoute
   SupervisionRoute: typeof SupervisionRoute
+  TerrenoRoute: typeof TerrenoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SupervisionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terreno': {
+      id: '/terreno'
+      path: '/terreno'
+      fullPath: '/terreno'
+      preLoaderRoute: typeof TerrenoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   MapaRoute: MapaRoute,
   PlanificadorRoute: PlanificadorRoute,
   SupervisionRoute: SupervisionRoute,
+  TerrenoRoute: TerrenoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
