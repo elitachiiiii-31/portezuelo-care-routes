@@ -21,8 +21,12 @@ SECRET_KEY = 'django-insecure-#$4(cg@5b8-&_ij5hqrbfugu8t1o5r1v%cn^77q$r1ml!j(a03
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".trycloudflare.com"]
 
-ALLOWED_HOSTS = ['*'] # Permitir que Docker se conecte sin problemas
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://portezuelo-care-routes.vercel.app",
+]
 
 # Application definition
 INSTALLED_APPS = [
