@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuditoriaRouteImport } from './routes/auditoria'
 import { Route as ChoferRouteImport } from './routes/chofer'
 import { Route as IntegracionRouteImport } from './routes/integracion'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as MapaRouteImport } from './routes/mapa'
+import { Route as MovilesRouteImport } from './routes/moviles'
 import { Route as PlanificadorRouteImport } from './routes/planificador'
 import { Route as SupervisionRouteImport } from './routes/supervision'
 import { Route as TerrenoRouteImport } from './routes/terreno'
@@ -38,9 +40,19 @@ const IntegracionRoute = IntegracionRouteImport.update({
   path: '/integracion',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MapaRoute = MapaRouteImport.update({
   id: '/mapa',
   path: '/mapa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MovilesRoute = MovilesRouteImport.update({
+  id: '/moviles',
+  path: '/moviles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlanificadorRoute = PlanificadorRouteImport.update({
@@ -64,7 +76,9 @@ export interface FileRoutesByFullPath {
   '/auditoria': typeof AuditoriaRoute
   '/chofer': typeof ChoferRoute
   '/integracion': typeof IntegracionRoute
+  '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
+  '/moviles': typeof MovilesRoute
   '/planificador': typeof PlanificadorRoute
   '/supervision': typeof SupervisionRoute
   '/terreno': typeof TerrenoRoute
@@ -74,7 +88,9 @@ export interface FileRoutesByTo {
   '/auditoria': typeof AuditoriaRoute
   '/chofer': typeof ChoferRoute
   '/integracion': typeof IntegracionRoute
+  '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
+  '/moviles': typeof MovilesRoute
   '/planificador': typeof PlanificadorRoute
   '/supervision': typeof SupervisionRoute
   '/terreno': typeof TerrenoRoute
@@ -85,7 +101,9 @@ export interface FileRoutesById {
   '/auditoria': typeof AuditoriaRoute
   '/chofer': typeof ChoferRoute
   '/integracion': typeof IntegracionRoute
+  '/login': typeof LoginRoute
   '/mapa': typeof MapaRoute
+  '/moviles': typeof MovilesRoute
   '/planificador': typeof PlanificadorRoute
   '/supervision': typeof SupervisionRoute
   '/terreno': typeof TerrenoRoute
@@ -97,7 +115,9 @@ export interface FileRouteTypes {
     | '/auditoria'
     | '/chofer'
     | '/integracion'
+    | '/login'
     | '/mapa'
+    | '/moviles'
     | '/planificador'
     | '/supervision'
     | '/terreno'
@@ -107,7 +127,9 @@ export interface FileRouteTypes {
     | '/auditoria'
     | '/chofer'
     | '/integracion'
+    | '/login'
     | '/mapa'
+    | '/moviles'
     | '/planificador'
     | '/supervision'
     | '/terreno'
@@ -117,7 +139,9 @@ export interface FileRouteTypes {
     | '/auditoria'
     | '/chofer'
     | '/integracion'
+    | '/login'
     | '/mapa'
+    | '/moviles'
     | '/planificador'
     | '/supervision'
     | '/terreno'
@@ -128,7 +152,9 @@ export interface RootRouteChildren {
   AuditoriaRoute: typeof AuditoriaRoute
   ChoferRoute: typeof ChoferRoute
   IntegracionRoute: typeof IntegracionRoute
+  LoginRoute: typeof LoginRoute
   MapaRoute: typeof MapaRoute
+  MovilesRoute: typeof MovilesRoute
   PlanificadorRoute: typeof PlanificadorRoute
   SupervisionRoute: typeof SupervisionRoute
   TerrenoRoute: typeof TerrenoRoute
@@ -164,11 +190,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntegracionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mapa': {
       id: '/mapa'
       path: '/mapa'
       fullPath: '/mapa'
       preLoaderRoute: typeof MapaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/moviles': {
+      id: '/moviles'
+      path: '/moviles'
+      fullPath: '/moviles'
+      preLoaderRoute: typeof MovilesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/planificador': {
@@ -200,7 +240,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuditoriaRoute: AuditoriaRoute,
   ChoferRoute: ChoferRoute,
   IntegracionRoute: IntegracionRoute,
+  LoginRoute: LoginRoute,
   MapaRoute: MapaRoute,
+  MovilesRoute: MovilesRoute,
   PlanificadorRoute: PlanificadorRoute,
   SupervisionRoute: SupervisionRoute,
   TerrenoRoute: TerrenoRoute,

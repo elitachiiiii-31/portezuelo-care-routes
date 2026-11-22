@@ -9,6 +9,8 @@ import {
   ShieldCheck,
   Stethoscope,
   Car,
+  Truck,
+  LogIn,
   PanelLeft,
 } from "lucide-react";
 
@@ -18,9 +20,11 @@ const items = [
   { to: "/mapa", label: "Georreferenciación", icon: Map },
   { to: "/planificador", label: "Planificador", icon: RouteIcon },
   { to: "/supervision", label: "Supervisión", icon: Activity },
+  { to: "/moviles", label: "Estado Móviles", icon: Truck },
   { to: "/terreno", label: "Vista Terreno", icon: Stethoscope },
   { to: "/chofer", label: "Vista Chofer", icon: Car },
   { to: "/auditoria", label: "Auditoría", icon: ShieldCheck },
+  { to: "/login", label: "Iniciar Sesión", icon: LogIn },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
