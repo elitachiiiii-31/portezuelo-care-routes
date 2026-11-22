@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuditoriaRouteImport } from './routes/auditoria'
+import { Route as ChoferRouteImport } from './routes/chofer'
 import { Route as IntegracionRouteImport } from './routes/integracion'
 import { Route as MapaRouteImport } from './routes/mapa'
 import { Route as PlanificadorRouteImport } from './routes/planificador'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuditoriaRoute = AuditoriaRouteImport.update({
   id: '/auditoria',
   path: '/auditoria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChoferRoute = ChoferRouteImport.update({
+  id: '/chofer',
+  path: '/chofer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IntegracionRoute = IntegracionRouteImport.update({
@@ -56,6 +62,7 @@ const TerrenoRoute = TerrenoRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auditoria': typeof AuditoriaRoute
+  '/chofer': typeof ChoferRoute
   '/integracion': typeof IntegracionRoute
   '/mapa': typeof MapaRoute
   '/planificador': typeof PlanificadorRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auditoria': typeof AuditoriaRoute
+  '/chofer': typeof ChoferRoute
   '/integracion': typeof IntegracionRoute
   '/mapa': typeof MapaRoute
   '/planificador': typeof PlanificadorRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auditoria': typeof AuditoriaRoute
+  '/chofer': typeof ChoferRoute
   '/integracion': typeof IntegracionRoute
   '/mapa': typeof MapaRoute
   '/planificador': typeof PlanificadorRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auditoria'
+    | '/chofer'
     | '/integracion'
     | '/mapa'
     | '/planificador'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auditoria'
+    | '/chofer'
     | '/integracion'
     | '/mapa'
     | '/planificador'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auditoria'
+    | '/chofer'
     | '/integracion'
     | '/mapa'
     | '/planificador'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditoriaRoute: typeof AuditoriaRoute
+  ChoferRoute: typeof ChoferRoute
   IntegracionRoute: typeof IntegracionRoute
   MapaRoute: typeof MapaRoute
   PlanificadorRoute: typeof PlanificadorRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/auditoria'
       fullPath: '/auditoria'
       preLoaderRoute: typeof AuditoriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chofer': {
+      id: '/chofer'
+      path: '/chofer'
+      fullPath: '/chofer'
+      preLoaderRoute: typeof ChoferRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/integracion': {
@@ -178,6 +198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditoriaRoute: AuditoriaRoute,
+  ChoferRoute: ChoferRoute,
   IntegracionRoute: IntegracionRoute,
   MapaRoute: MapaRoute,
   PlanificadorRoute: PlanificadorRoute,

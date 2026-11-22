@@ -8,6 +8,7 @@ import {
   Activity,
   ShieldCheck,
   Stethoscope,
+  Car,
   PanelLeft,
 } from "lucide-react";
 
@@ -18,6 +19,7 @@ const items = [
   { to: "/planificador", label: "Planificador", icon: RouteIcon },
   { to: "/supervision", label: "Supervisión", icon: Activity },
   { to: "/terreno", label: "Vista Terreno", icon: Stethoscope },
+  { to: "/chofer", label: "Vista Chofer", icon: Car },
   { to: "/auditoria", label: "Auditoría", icon: ShieldCheck },
 ] as const;
 

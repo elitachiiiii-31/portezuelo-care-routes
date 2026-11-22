@@ -9,6 +9,7 @@ import {
   WifiOff,
   CheckCircle2,
   Clock,
+  MessageCircle,
 } from "lucide-react";
 import { PageHeader, Btn } from "../components/AppShell";
 import {
@@ -30,10 +31,13 @@ type EstadoVisita =
   | "Completada"
   | "Rechazada";
 
+type EstadoConfirmacion = "Pendiente aviso" | "Confirmada" | "Cancelada";
+
 interface TareaTrabajador {
   id: string | number;
   hora: string;
   paciente: string;
+  telefono: string;
   sector: string;
   equipo: string;
   referencia: string;
@@ -41,6 +45,7 @@ interface TareaTrabajador {
   lat?: number;
   lng?: number;
   estado: EstadoVisita;
+  confirmacion: EstadoConfirmacion;
   observacion?: string;
 }
 
@@ -66,12 +71,14 @@ const SECTORES_PORTEZUELO = [
 const STORAGE_ESTADOS_KEY = "optiruta_terreno_estados_v1";
 const STORAGE_COLA_VISITAS_KEY = "optiruta_terreno_cola_visitas_v1";
 const STORAGE_COLA_PACIENTES_KEY = "optiruta_terreno_cola_pacientes_v1";
+const STORAGE_CONFIRMACIONES = "optiruta_confirmaciones_paciente_v1";
 
 const TAREAS_INICIALES: TareaTrabajador[] = [
   {
     id: "v-1",
     hora: "08:00",
     paciente: "Rosa Henríquez",
+    telefono: "56981234567",
     sector: "Portezuelo Urbano",
     equipo: "Enf. Carla Soto",
     referencia: "Pasaje cercano a plaza, casa reja blanca",
@@ -79,11 +86,13 @@ const TAREAS_INICIALES: TareaTrabajador[] = [
     lat: -36.533,
     lng: -72.438,
     estado: "Pendiente",
+    confirmacion: "Confirmada",
   },
   {
     id: "v-2",
     hora: "08:30",
     paciente: "Luis Cartes",
+    telefono: "56983456789",
     sector: "Cucha Cucha",
     equipo: "TENS Diego Rojas",
     referencia: "Camino rural Cucha Cucha, portón verde tras curva",
@@ -91,11 +100,13 @@ const TAREAS_INICIALES: TareaTrabajador[] = [
     lat: -36.551,
     lng: -72.462,
     estado: "En ruta",
+    confirmacion: "Pendiente aviso",
   },
   {
     id: "v-3",
     hora: "09:00",
     paciente: "Ernestina Sáez",
+    telefono: "56985678901",
     sector: "Llahuecuy",
     equipo: "Kine. Ana Vidal",
     referencia: "Sector Llahuecuy, segunda casa después del puente",
@@ -103,11 +114,13 @@ const TAREAS_INICIALES: TareaTrabajador[] = [
     lat: -36.518,
     lng: -72.475,
     estado: "Completada",
+    confirmacion: "Confirmada",
   },
   {
     id: "v-4",
     hora: "09:30",
     paciente: "Héctor Muñoz",
+    telefono: "56982345678",
     sector: "Buenos Aires",
     equipo: "Enf. Carla Soto",
     referencia: "Sector Buenos Aires km 3, casa madera junto a nogal",
@@ -115,11 +128,13 @@ const TAREAS_INICIALES: TareaTrabajador[] = [
     lat: -36.542,
     lng: -72.419,
     estado: "Completada",
+    confirmacion: "Confirmada",
   },
   {
     id: "v-5",
     hora: "10:00",
     paciente: "Marta Fuentealba",
+    telefono: "56984567890",
     sector: "Chudal",
     equipo: "TENS Diego Rojas",
     referencia: "Camino a Chudal, frente a posta rural antigua",
@@ -127,11 +142,13 @@ const TAREAS_INICIALES: TareaTrabajador[] = [
     lat: -36.509,
     lng: -72.411,
     estado: "Pendiente",
+    confirmacion: "Confirmada",
   },
   {
     id: "v-6",
     hora: "10:30",
     paciente: "Juan Riquelme",
+    telefono: "56986789012",
     sector: "Tauco",
     equipo: "Kine. Ana Vidal",
     referencia: "Sector Tauco alto, portón metálico gris",
@@ -139,6 +156,7 @@ const TAREAS_INICIALES: TareaTrabajador[] = [
     lat: -36.564,
     lng: -72.445,
     estado: "En visita",
+    confirmacion: "Confirmada",
   },
 ];
 
@@ -175,6 +193,7 @@ function normalizarTareasDesdeRuta(data: unknown): TareaTrabajador[] {
           obj.nombre_completo ??
           `Paciente ${idx + 1}`
       ),
+      telefono: String(obj.telefono ?? "56981234567"),
       sector: String(obj.sector ?? obj.sector_comunal ?? "Portezuelo Urbano"),
       equipo: String(
         obj.equipo ??
@@ -196,6 +215,7 @@ function normalizarTareasDesdeRuta(data: unknown): TareaTrabajador[] {
       lat: typeof obj.lat === "number" ? obj.lat : undefined,
       lng: typeof obj.lng === "number" ? obj.lng : undefined,
       estado: estadoNormalizado,
+      confirmacion: "Pendiente aviso",
       observacion: typeof obj.observacion === "string" ? obj.observacion : "",
     };
   });
@@ -229,7 +249,6 @@ function VistaTerrenoPage() {
     }
   });
 
-  // Formulario ingreso de paciente en terreno
   const [run, setRun] = useState("");
   const [nombreCompleto, setNombreCompleto] = useState("");
   const [fichaClinica, setFichaClinica] = useState("");
@@ -273,17 +292,27 @@ function VistaTerrenoPage() {
         string,
         { estado: EstadoVisita; observacion?: string }
       > = {};
+      let confs: Record<string, EstadoConfirmacion> = {};
       try {
         overrides = JSON.parse(
           localStorage.getItem(STORAGE_ESTADOS_KEY) || "{}"
         );
+        confs = JSON.parse(
+          localStorage.getItem(STORAGE_CONFIRMACIONES) || "{}"
+        );
       } catch {
         overrides = {};
+        confs = {};
       }
 
       const combinadas = lista.map((t) => {
         const saved = overrides[String(t.id)];
-        return saved ? { ...t, ...saved } : t;
+        const conf = confs[String(t.id)];
+        return {
+          ...t,
+          ...(saved ?? {}),
+          confirmacion: conf ?? t.confirmacion,
+        };
       });
       setTareas(combinadas);
     } catch {
@@ -456,6 +485,13 @@ function VistaTerrenoPage() {
     );
   }
 
+  function construirLinkWhatsApp(tarea: TareaTrabajador) {
+    const texto = encodeURIComponent(
+      `Hola ${tarea.paciente}, le escribimos de CESFAM Portezuelo. Hoy está programada su visita domiciliaria cerca de las ${tarea.hora} hrs (${tarea.sector}). ¿Confirma que estará en casa?`
+    );
+    return `https://wa.me/${tarea.telefono}?text=${texto}`;
+  }
+
   const totalPendientesCola = colaVisitas.length + colaPacientes.length;
 
   return (
@@ -493,7 +529,6 @@ function VistaTerrenoPage() {
         }
       />
 
-      {/* Selector de trabajador y métricas rápidas */}
       <div className="mb-6 grid grid-cols-1 gap-4 rounded-xl border bg-card p-4 md:grid-cols-3 md:items-end">
         <div>
           <label
@@ -558,7 +593,6 @@ function VistaTerrenoPage() {
         </div>
       )}
 
-      {/* Pestaña 1: Tareas y ruta asignada */}
       {pestana === "ruta" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -612,12 +646,17 @@ function VistaTerrenoPage() {
                     </p>
                   </div>
 
-                  <span className="inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1 text-xs font-medium">
-                    {tarea.estado === "Completada" && (
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                    )}
-                    {tarea.estado}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full border bg-background px-3 py-1 text-xs font-medium">
+                      Cita: {tarea.confirmacion}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1 text-xs font-medium">
+                      {tarea.estado === "Completada" && (
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                      )}
+                      {tarea.estado}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="mt-3 rounded-lg border bg-background px-3.5 py-2.5 text-sm">
@@ -656,6 +695,16 @@ function VistaTerrenoPage() {
                   ))}
 
                   <a
+                    href={construirLinkWhatsApp(tarea)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg border bg-background px-3.5 py-2 text-sm font-medium hover:bg-muted"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Avisar paciente
+                  </a>
+
+                  <a
                     href={mapsUrl}
                     target="_blank"
                     rel="noreferrer"
@@ -671,7 +720,6 @@ function VistaTerrenoPage() {
         </div>
       )}
 
-      {/* Pestaña 2: Ingreso de pacientes en terreno */}
       {pestana === "nuevo-paciente" && (
         <form
           onSubmit={handleGuardarPaciente}
